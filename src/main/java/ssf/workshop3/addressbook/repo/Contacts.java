@@ -1,12 +1,17 @@
 package ssf.workshop3.addressbook.repo;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -15,17 +20,50 @@ import ssf.workshop3.addressbook.model.Contact;
 @Repository
 public class Contacts {
 
-    private List<Contact> contacts = new ArrayList<>();
+    private final static String database = "C://opt/tmp/data";
 
-    public List<Contact> findAll() {
-        return contacts;
+    public Map<String, String> listAll() throws IOException {
+
+        Map<String, String> contactMap = new HashMap<>();
+        File f = new File(database);
+        File[] files = f.listFiles();
+        for (File file : files) {
+            FileReader fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+            contactMap.put(file.getName().substring(0, (file.getName().length() - 4)), br.readLine());
+            fr.close();
+        }
+
+        return contactMap;
     }
-    
+
+    public List<String> find(String id) {
+
+        File f = new File(database);
+        File[] files = f.listFiles();
+        for (File file : files) {
+            if (file.getName().equals(id + ".txt")) {
+                f = file;
+            }
+        }
+
+        List<String> list = new ArrayList<>();
+
+        try (FileReader fr = new FileReader(f)) {
+            BufferedReader br = new BufferedReader(fr);
+            list = br.lines().toList();
+        } catch (FileNotFoundException e) {
+            return null;
+        } catch (IOException e) {
+            System.out.println("error");
+        }
+
+        return list;
+    }
+
     public void save(Contact contact) throws IOException {
 
-        contacts.add(contact);
-
-        File f = new File(String.format("C://opt/tmp/data/%s.txt", contact.getId()));
+        File f = new File(String.format("%s/%s.txt", database, contact.getId()));
 
         OutputStream os = new FileOutputStream(f);
         PrintWriter pw = new PrintWriter(os);
@@ -36,4 +74,5 @@ public class Contacts {
         pw.flush();
         os.close();
     }
+
 }

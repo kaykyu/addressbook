@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Contact Details</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contact Details</h1>
+        <br>
+        <hr>
+        <table class="table table-striped">
+            <tr>
+                <td>Name</td>
+                <td data-th-text="${name}"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td data-th-text="${email}"></td>
+            </tr>
+            <tr>
+                <td>Phone number</td>
+                <td data-th-text="${phone}"></td>
+            </tr>
+            <tr>
+                <td>Date of birth</td>
+                <td data-th-text="${birthday}"></td>
+            </tr>
+        </table>
+
+        <a th:href="@{/list}" class="btn btn-primary">Back to Contact List</a>
+
+    </div>
+</body>
+
+</html>

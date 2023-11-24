@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -62,8 +65,29 @@ public class ContactController {
         return "success";
     }
 
+    @GetMapping("/contact/{id}")
+    public String getContact(@PathVariable("id") String id, Model model) {
 
-    
+        List<String> info = repo.find(id);
 
+        if (info == null) {
+            return "error404";
+        }
+        
+        model.addAttribute("name", info.get(0));
+        model.addAttribute("email", info.get(1));
+        model.addAttribute("phone", info.get(2));
+        model.addAttribute("birthday", info.get(3));
+
+        return "contactlist";
+    }
+
+    @GetMapping("/list")
+    public String list(Model model) throws IOException {
+
+        Map<String, String> contactMap = repo.listAll();
+        model.addAttribute("contacts", contactMap);
+        return "list";
+    }
 
 }
