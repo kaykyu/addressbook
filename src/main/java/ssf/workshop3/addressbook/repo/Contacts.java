@@ -20,7 +20,11 @@ import ssf.workshop3.addressbook.model.Contact;
 @Repository
 public class Contacts {
 
-    private final static String database = "C://opt/tmp/data";
+    private static String database = "";
+
+    public static void setDatabase(String database) {
+        Contacts.database = database;
+    }
 
     public Map<String, String> listAll() throws IOException {
 

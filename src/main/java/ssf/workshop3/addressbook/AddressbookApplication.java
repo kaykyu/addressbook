@@ -7,6 +7,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import ssf.workshop3.addressbook.repo.Contacts;
+
 @SpringBootApplication
 public class AddressbookApplication implements ApplicationRunner {
 
@@ -24,6 +26,8 @@ public class AddressbookApplication implements ApplicationRunner {
 			if (!fileDir.exists()) {
 				fileDir.mkdirs();
 			}
+
+			Contacts.setDatabase("C://" + dataDir);
 
 		} else {			
 			System.out.println("--dataDir not specified, please try again");

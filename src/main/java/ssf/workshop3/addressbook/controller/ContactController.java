@@ -48,7 +48,7 @@ public class ContactController {
 
         if (binding.hasErrors()) {
             return "index";
-        } else if (age < 10 || age > 100) {
+        } else if (age < 10 || age > 99) {
             model.addAttribute("ageError", "Age must be more than 10 and less than 100");
             return "index";
         }
