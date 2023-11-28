@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.validation.Valid;
 import ssf.workshop3.addressbook.model.Contact;
 import ssf.workshop3.addressbook.repo.Contacts;
@@ -39,18 +43,21 @@ public class ContactController {
     }
 
     @PostMapping("/contact")
-    public String saveContact(@Valid @ModelAttribute("contact") Contact contact, BindingResult binding, Model model)
+    public ModelAndView saveContact(@Valid @ModelAttribute("contact") Contact contact, BindingResult binding, Model model)
             throws IOException {
 
         LocalDate birthDate = LocalDate.ofInstant(contact.getBirthday().toInstant(), ZoneId.systemDefault());
         Period diff = Period.between(birthDate, LocalDate.now());
         int age = diff.getYears();
+        ModelAndView mav = new ModelAndView();
 
         if (binding.hasErrors()) {
-            return "index";
+            mav.setViewName("index");
+            return mav;
         } else if (age < 10 || age > 99) {
             model.addAttribute("ageError", "Age must be more than 10 and less than 100");
-            return "index";
+            mav.setViewName("index");
+            return mav;
         }
 
         final String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -62,16 +69,21 @@ public class ContactController {
         contact.setId(sb.toString());
 
         repo.save(contact);
-        return "success";
+        mav.setStatus(HttpStatusCode.valueOf(201));
+        mav.setViewName("success");
+        return mav;
     }
 
     @GetMapping("/contact/{id}")
-    public String getContact(@PathVariable("id") String id, Model model) {
+    public ModelAndView getContact(@PathVariable("id") String id, Model model) {
 
         List<String> info = repo.find(id);
+        ModelAndView mav = new ModelAndView();
 
         if (info == null) {
-            return "error404";
+            mav.setStatus(HttpStatusCode.valueOf(404));
+            mav.setViewName("error404");
+            return mav;
         }
         
         model.addAttribute("name", info.get(0));
@@ -79,7 +91,8 @@ public class ContactController {
         model.addAttribute("phone", info.get(2));
         model.addAttribute("birthday", info.get(3));
 
-        return "contactlist";
+        mav.setViewName("contactlist");
+        return mav;
     }
 
     @GetMapping("/list")
