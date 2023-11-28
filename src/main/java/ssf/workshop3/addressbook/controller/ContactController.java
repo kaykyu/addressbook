@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionEvent;
 import jakarta.validation.Valid;
 import ssf.workshop3.addressbook.model.Contact;
 import ssf.workshop3.addressbook.repo.Contacts;
