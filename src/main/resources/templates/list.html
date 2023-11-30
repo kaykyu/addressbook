@@ -16,6 +16,10 @@
         <h1>Contact Listing</h1>
         <hr>
 
+        <div th:if="${contacts.isEmpty()}">
+            <h4>No contacts saved.</h4>
+        </div>
+
         <div class="list-group">
             <ul th:each="entry: ${contacts}">
                 <a th:href="@{/contact/{id}(id=${entry.key})}" class="list-group-item list-group-item-action">

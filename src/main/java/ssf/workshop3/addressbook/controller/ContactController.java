@@ -22,14 +22,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
 import ssf.workshop3.addressbook.model.Contact;
-import ssf.workshop3.addressbook.repo.Contacts;
+import ssf.workshop3.addressbook.repo.ContactsRedis;
 
 @Controller
 @RequestMapping(value = { "/", "/index.html" })
 public class ContactController {
 
     @Autowired
-    Contacts repo;
+    ContactsRedis repo;
 
     @GetMapping("/add")
     public String addInfo(Model model) {
